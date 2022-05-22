@@ -1,0 +1,62 @@
+// publisherComponent.js
+import { LightningElement, wire ,track} from 'lwc';
+import { createMessageContext, releaseMessageContext,publish } from 'lightning/messageService';
+import ACCOUNTLMC from '@salesforce/messageChannel/AccountMessageChannel__c';
+import getAccounts from '@salesforce/apex/AccountController.getAccounts';
+export default class PublisherComponent extends LightningElement {
+    @track accountList;
+    context = createMessageContext();
+
+    connectedCallback()
+    {
+        getAccounts()
+        .then(result => 
+            {
+                this.accountList = result;
+            })
+            
+    }
+   /* handleClick(event)
+    {
+        event.preventDefault();
+        const payload = {
+            recordId : event.target.dataset.value,
+            recordData : {value : "Message from lwc"},
+            recordSource : "LWC"
+        }
+        publish(this.context,ACCOUNTLMC,payload);
+    }*/
+    constructor() {
+        super();
+        window.addEventListener('load', (event) => {
+           this.handleClick();
+          });
+        //this.template.addEventListener('load', this.handleClick2);
+        console.log('Fired');
+      }
+     
+      handleClick()
+      {
+        //  event.preventDefault();
+          const payload = {
+              recordId : '0015g00000jp5ndAAA',
+              recordData : {value : "Message from lwc"},
+              recordSource : "LWC"
+          }
+          publish(this.context,ACCOUNTLMC,payload);
+          alert(payload.recordId);
+      }
+ /*   handleClick2()
+    {
+        
+        const payload2 = {
+          
+           
+           recordIds : 'ksh'
+        }
+       
+        publish(this.context,ACCOUNTLMC,payload2);
+      
+    
+    }*/
+}
