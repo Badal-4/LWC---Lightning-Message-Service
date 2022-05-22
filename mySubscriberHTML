@@ -1,0 +1,21 @@
+<template>
+    <lightning-card title="Subscriber Component" icon-name="custom:custom14">
+   <template if:true={accountId}>
+       <p>
+           <lightning-record-form
+           record-id={accountId}
+           object-api-name={objectApiName}
+           fields={fields}
+           columns="1"
+           mode="view"></lightning-record-form>
+       </p>
+
+       <p>Message : {recordData}</p>
+       <p>Source : {recordSource}</p>
+       <p>Account Id : {accountId}</p>
+       <p>{accId}</p>
+   </template>
+
+
+    </lightning-card>
+  </template>
