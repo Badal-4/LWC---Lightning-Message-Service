@@ -1,0 +1,38 @@
+
+import { LightningElement ,track} from "lwc";
+import NAME_FIELD from '@salesforce/schema/Account.Name';
+import TYPE_FIELD from '@salesforce/schema/Account.Type';
+import { APPLICATION_SCOPE, createMessageContext,subscribe } from 'lightning/messageService';
+import ACCOUNTLMC from '@salesforce/messageChannel/AccountMessageChannel__c';
+export default class subscribeComponent extends LightningElement 
+{
+   recordData = '';
+   accountId;
+   recordSource;
+   recordData;
+   accId;
+   context = createMessageContext();
+   @track objectApiName = 'Account';
+   fields = [NAME_FIELD,TYPE_FIELD]
+
+   connectedCallback()
+   {
+       this.subscribeLMC();
+       console.log('Fired 1');
+   }
+
+   subscribeLMC()
+   {
+      subscribe(this.context,ACCOUNTLMC,(message) => {
+          this.handleMessage(message);
+      },{scope : APPLICATION_SCOPE})
+   }
+handleMessage(message)
+{
+    this.accountId = message.recordId;
+    this.recordSource = message.recordSource;
+    this.recordData = message.recordData.value;
+    //this.accId = message.recordIds;
+    console.log('accounts'+this.accountId);
+}
+}
